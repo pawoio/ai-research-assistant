@@ -1,0 +1,98 @@
+# Version control
+.git
+.git-*
+!.gitignore
+
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.whl
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+site/
+.python-version
+
+# Test, type-check, lints
+.pytest_cache/
+.coverage
+.coverage.*
+.cache/
+.mypy_cache/
+.hypothesis/
+.pyre/
+ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.pid
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+*.tfstate
+*.tfstate.*
+.secrets*/
+secrets*/
+*.bak
+
+# Cloud/credentials (keep out of images)
+.ssh/
+.aws/
+.gcp/
+.azure/
+.kube/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Node (if present in repo)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.bun/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Docker/devcontainer/project infra
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.*.yml
+.devcontainer/
+.docker/
+
+# Data artifacts (opt-in if your project generates large files)
+data/
+datasets/
+artifacts/
+checkpoints/
+wandb/
+mlruns/
+tensorboard/
+
+# Docs/build outputs (optional)
+docs/_build/

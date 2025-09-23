@@ -1,0 +1,40 @@
+{
+  "name": "AI Research Assistant",
+
+  // Build from a Dockerfile using the newer "build" object
+  "build": {
+    "dockerfile": "Dockerfile",   // was "dockerFile" (old); now lower-case inside "build"
+    "context": ".."               // Docker build context (paths are relative to this)
+    // "args": { }                // optional: pass build-args to the Dockerfile
+    // "target": "dev"            // optional: multi-stage target
+  },
+
+  "workspaceFolder": "/workspace",
+
+  // Forward container ports to the host for local access
+  "forwardPorts": [8080, 5000],
+
+  // VS Code-specific extensions and settings belong under "customizations.vscode"
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode"
+        // Tip: avoid listing controller/local-only tooling here (see notes)
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python3"
+      }
+    }
+  }
+
+  // Optional/advanced:
+  // "features": { }               // Dev Container Features to install tools at build time
+  // "remoteUser": "vscode"        // Default user inside container (matches image/user setup)
+  // "postCreateCommand": "pip install -r requirements.txt" // Run once after container is created
+  // "postStartCommand": "",       // Runs each start
+  // "mounts": [ "source=...,target=...,type=..." ] // Extra volumes/binds
+  // "runArgs": [ "--cap-add=SYS_PTRACE" ]          // Extra container run flags
+}

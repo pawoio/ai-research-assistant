@@ -1,0 +1,25 @@
+{
+  "FastAPI App": {
+    "prefix": "fastapi-app",
+    "body": [
+      "from fastapi import FastAPI",
+      "",
+      "app = FastAPI()",
+      "",
+      "@app.get(\"/\")",
+      "async def root():",
+      "  return {\"status\": \"ok\"}"
+    ],
+    "description": "Boilerplate for a FastAPI application"
+  },
+  "BigQuery Client": {
+    "prefix": "bq-client",
+    "body": [
+      "from google.cloud import bigquery",
+      "",
+      "client = bigquery.Client()",
+      ""
+    ],
+    "description": "Initialize BigQuery client"
+  }
+}

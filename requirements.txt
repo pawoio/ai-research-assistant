@@ -1,0 +1,6 @@
+arxiv
+google-cloud-bigquery
+fastapi[all]
+uvicorn
+vertexai
+pandas
