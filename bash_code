@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+echo "--- 1. Finding and removing old Terraform versions ---"
+# Find all instances of the terraform executable in common bin paths and remove them
+for tf_path in $(which -a terraform || true); do
+    if [[ -f "$tf_path" ]]; then
+        echo "Found old terraform at: $tf_path. Removing it..."
+        sudo rm "$tf_path"
+    fi
+done
+
+echo "--- 2. Installing the latest version of Terraform ---"
+# Use the checkpoint API to get the latest version number
+LATEST_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
+CPU_ARCH=$(dpkg --print-architecture)
+
+echo "Latest version is ${LATEST_VERSION} for architecture ${CPU_ARCH}"
+LATEST_URL="https://releases.hashicorp.com/terraform/${LATEST_VERSION}/terraform_${LATEST_VERSION}_linux_${CPU_ARCH}.zip"
+
+echo "Downloading from: $LATEST_URL"
+wget -q "$LATEST_URL" -O /tmp/terraform.zip
+
+echo "Unzipping..."
+unzip -o /tmp/terraform.zip -d /tmp
+
+echo "Installing to /usr/local/bin..."
+sudo mv /tmp/terraform /usr/local/bin/terraform
+
+echo "Cleaning up..."
+rm /tmp/terraform.zip
+
+echo "--- 3. Verifying new installation ---"
+terraform -v
+
+echo "✅ Terraform is now correctly installed!"
+

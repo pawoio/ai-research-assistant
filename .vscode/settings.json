@@ -1,5 +1,6 @@
 {
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "cloudcode.project": "ai-research-assistant-473010",
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.exclude": {
