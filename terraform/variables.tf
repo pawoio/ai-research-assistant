@@ -31,3 +31,17 @@ variable "pubsub_topic_name" {
   description = "The name for the Pub/Sub topic."
   default     = "research-pipeline-triggers"
 }
+
+variable "gcp_apis" {
+  type        = list(string)
+  description = "A list of Google Cloud APIs to enable on the project."
+  default = [
+    "aiplatform.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "run.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "bigquery.googleapis.com",
+    "storage.googleapis.com",
+    "pubsub.googleapis.com"
+  ]
+}

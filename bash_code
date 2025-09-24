@@ -1,37 +1,18 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
+cd /home/ja/Documents/projekty/ai-research-assistant/terraform
 
-echo "--- 1. Finding and removing old Terraform versions ---"
-# Find all instances of the terraform executable in common bin paths and remove them
-for tf_path in $(which -a terraform || true); do
-    if [[ -f "$tf_path" ]]; then
-        echo "Found old terraform at: $tf_path. Removing it..."
-        sudo rm "$tf_path"
-    fi
+# create module directories and standard files
+mkdir -p modules/{bigquery_dataset,storage_bucket,pubsub_topic,project_apis,bigquery_jobs}
+for m in modules/{bigquery_dataset,storage_bucket,pubsub_topic,project_apis,bigquery_jobs}; do
+  mkdir -p "$m"
+  touch "$m"/{main.tf,variables.tf,outputs.tf}
 done
 
-echo "--- 2. Installing the latest version of Terraform ---"
-# Use the checkpoint API to get the latest version number
-LATEST_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
-CPU_ARCH=$(dpkg --print-architecture)
+# create top-level terraform files (won't overwrite existing content)
+touch main.tf provider.tf variables.tf outputs.tf apis.tf bigquery.tf gcs.tf pubsub.tf README.md
 
-echo "Latest version is ${LATEST_VERSION} for architecture ${CPU_ARCH}"
-LATEST_URL="https://releases.hashicorp.com/terraform/${LATEST_VERSION}/terraform_${LATEST_VERSION}_linux_${CPU_ARCH}.zip"
+# ensure sql directory exists
+mkdir -p sql
 
-echo "Downloading from: $LATEST_URL"
-wget -q "$LATEST_URL" -O /tmp/terraform.zip
-
-echo "Unzipping..."
-unzip -o /tmp/terraform.zip -d /tmp
-
-echo "Installing to /usr/local/bin..."
-sudo mv /tmp/terraform /usr/local/bin/terraform
-
-echo "Cleaning up..."
-rm /tmp/terraform.zip
-
-echo "--- 3. Verifying new installation ---"
-terraform -v
-
-echo "✅ Terraform is now correctly installed!"
-
+echo "Scaffold created under terraform/. Edit the created files to add module implementations."

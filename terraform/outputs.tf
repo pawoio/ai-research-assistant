@@ -10,15 +10,20 @@ output "region" {
 
 output "bigquery_dataset_id" {
   description = "The ID of the created BigQuery dataset."
-  value       = google_bigquery_dataset.research_data.dataset_id
+  value       = module.bigquery_dataset.dataset_id
+}
+
+output "bigquery_dataset_self_link" {
+  description = "The self_link of the created BigQuery dataset."
+  value       = module.bigquery_dataset.self_link
 }
 
 output "gcs_bucket_name" {
   description = "The name of the GCS bucket for storing research papers."
-  value       = google_storage_bucket.paper_storage.name
+  value       = module.storage_bucket.name
 }
 
 output "pubsub_topic_name" {
   description = "The name of the Pub/Sub topic for pipeline triggers."
-  value       = google_pubsub_topic.pipeline_triggers.name
+  value       = module.pubsub_topic.name
 }
