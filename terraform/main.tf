@@ -59,3 +59,42 @@ resource "google_pubsub_topic" "pipeline_triggers" {
   name    = var.pubsub_topic_name
   project = var.project_id
 }
+
+
+locals {
+  create_tables_sql = templatefile("${path.module}/sql/001_create_tables.sql", {
+    project_id = var.project_id
+    dataset_id = google_bigquery_dataset.research_data.dataset_id
+  })
+}
+
+resource "google_bigquery_job" "create_tables" {
+  job_id   = "create_tables_${replace(timestamp(), ":", "_")}"
+  location = var.region
+
+  query {
+    query          = local.create_tables_sql
+    use_legacy_sql = false
+  }
+
+  depends_on = [google_bigquery_dataset.research_data]
+}
+
+locals {
+  create_index_sql = templatefile("${path.module}/sql/002_create_vector_index.sql", {
+    project_id = var.project_id
+    dataset_id = google_bigquery_dataset.research_data.dataset_id
+  })
+}
+
+resource "google_bigquery_job" "create_vector_index" {
+  job_id   = "create_vector_index_${replace(timestamp(), ":", "_")}"
+  location = var.region
+
+  query {
+    query          = local.create_index_sql
+    use_legacy_sql = false
+  }
+
+  depends_on = [google_bigquery_job.create_tables]
+}
