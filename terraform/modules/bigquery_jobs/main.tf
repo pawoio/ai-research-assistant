@@ -5,33 +5,37 @@ locals {
   })
 }
 
-resource "google_bigquery_job" "create_tables" {
-  job_id   = "create_tables_${replace(timestamp(), ":", "_")}"
-  location = var.location
-  project  = var.project_id
-
-  query {
-    query          = local.create_tables_sql
-    use_legacy_sql = false
+resource "null_resource" "create_bigquery_table" {
+  provisioner "local-exec" {
+    command = <<EOT
+    bq query \
+      --project_id=${var.project_id} \
+      --location=${var.location} \
+      --nouse_legacy_sql \
+      --format=none \
+      '${replace(local.create_tables_sql, "'", "'\"'\"'")}'
+    EOT
   }
 }
 
-locals {
-  create_index_sql = templatefile("${path.module}/../../sql/002_create_vector_index.sql", {
-    project_id = var.project_id
-    dataset_id = var.dataset_id
-  })
-}
+# locals {
+#   create_index_sql = templatefile("${path.module}/../../sql/002_create_vector_index.sql", {
+#     project_id = var.project_id
+#     dataset_id = var.dataset_id
+#   })
+# }
 
-resource "google_bigquery_job" "create_vector_index" {
-  job_id   = "create_vector_index_${replace(timestamp(), ":", "_")}"
-  location = var.location
-  project  = var.project_id
+# resource "null_resource" "create_vector_index" {
+#   provisioner "local-exec" {
+#     command = <<EOT
+#     bq query \
+#       --project_id=${var.project_id} \
+#       --location=${var.location} \
+#       --nouse_legacy_sql \
+#       --format=none \
+#       '${replace(local.create_index_sql, "'", "'\"'\"'")}'
+#     EOT
+#   }
 
-  query {
-    query          = local.create_index_sql
-    use_legacy_sql = false
-  }
-
-  depends_on = [google_bigquery_job.create_tables]
-}
+#   depends_on = [null_resource.create_bigquery_table]
+# }
