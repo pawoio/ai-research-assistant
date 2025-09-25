@@ -1,18 +1,24 @@
-#!/usr/bin/env bash
-set -euo pipefail
-cd /home/ja/Documents/projekty/ai-research-assistant/terraform
+#!/bin/bash
 
-# create module directories and standard files
-mkdir -p modules/{bigquery_dataset,storage_bucket,pubsub_topic,project_apis,bigquery_jobs}
-for m in modules/{bigquery_dataset,storage_bucket,pubsub_topic,project_apis,bigquery_jobs}; do
-  mkdir -p "$m"
-  touch "$m"/{main.tf,variables.tf,outputs.tf}
-done
+# Set root directory
+ROOT_DIR="cloud_run/paper_discovery"
 
-# create top-level terraform files (won't overwrite existing content)
-touch main.tf provider.tf variables.tf outputs.tf apis.tf bigquery.tf gcs.tf pubsub.tf README.md
+# Create directories
+mkdir -p "cloud_run"
+mkdir -p ${ROOT_DIR}
+mkdir -p ${ROOT_DIR}/services
+mkdir -p ${ROOT_DIR}/models
 
-# ensure sql directory exists
-mkdir -p sql
+# Create empty files
+touch ${ROOT_DIR}/main.py
+touch ${ROOT_DIR}/services/__init__.py
+touch ${ROOT_DIR}/services/arxiv_client.py
+touch ${ROOT_DIR}/services/bigquery_client.py
+touch ${ROOT_DIR}/services/paper_processor.py
+touch ${ROOT_DIR}/models/__init__.py
+touch ${ROOT_DIR}/models/paper_models.py
+touch ${ROOT_DIR}/requirements.txt
+touch ${ROOT_DIR}/Dockerfile
+touch ${ROOT_DIR}/config.py
 
-echo "Scaffold created under terraform/. Edit the created files to add module implementations."
+echo "Project structure created under ${ROOT_DIR}/"

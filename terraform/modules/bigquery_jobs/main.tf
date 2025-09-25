@@ -5,7 +5,7 @@ locals {
   })
 }
 
-resource "null_resource" "create_bigquery_table" {
+resource "null_resource" "create_bigquery_tables" {
   provisioner "local-exec" {
     command = <<EOT
     bq query \
